@@ -1,6 +1,9 @@
 const { remote } = require('electron');
 const { BrowserWindow } = require('electron').remote;
 const fs = require('fs');
+var pathI = require('path');
+
+let iconA = require('electron').nativeImage.createFromPath(pathI.join(__dirname, "images/icon.ico"))
 
 document.getElementById('startGameBtn').addEventListener('click', createGame);
 document.getElementById('startGameBackBtn').addEventListener('click', backToMain);
@@ -15,6 +18,7 @@ function backToMain() {
     width: 800,
      height: 600,
      resizable: false,
+      icon: iconA,
      webPreferences: {
              nodeIntegration: true
          }
@@ -57,6 +61,7 @@ function createGame() {
     width: 800,
      height: 600,
      resizable: false,
+      icon: iconA,
      webPreferences: {
              nodeIntegration: true
          }
