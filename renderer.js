@@ -24,8 +24,6 @@ function createNewGame() {
 
   win.setMenuBarVisibility(false)
 
-  exit();
-
   // Open the DevTools.
    win.webContents.openDevTools()
 
@@ -36,4 +34,6 @@ function createNewGame() {
     // when you should delete the corresponding element.
     win = null
   })
+
+  exit();
 }

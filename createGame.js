@@ -11,7 +11,7 @@ function exit() {
 }
 
 function createFile() {
-  let student = {
+  let game = {
     name: 'Mike',
     age: 23,
     gender: 'Male',
@@ -19,11 +19,13 @@ function createFile() {
     car: 'Honda'
 };
 
-let data = JSON.stringify(student);
+let data = JSON.stringify(game);
 fs.writeFileSync('saves/student-2.json', data);
 }
 
 function createGame() {
+
+  createFile();
 
   let win = new BrowserWindow({
     width: 800,
@@ -37,8 +39,6 @@ function createGame() {
 
   win.setMenuBarVisibility(false)
 
-  exit();
-
   // Open the DevTools.
    win.webContents.openDevTools()
 
@@ -49,4 +49,5 @@ function createGame() {
     // when you should delete the corresponding element.
     win = null
   })
+    exit();
 }
