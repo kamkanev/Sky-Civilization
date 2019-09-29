@@ -3,7 +3,7 @@ const { BrowserWindow } = require('electron').remote;
 const fs = require('fs');
 var pathI = require('path');
 
-let iconA = require('electron').nativeImage.createFromPath(pathI.join(__dirname, "images/icon.ico"))
+let iconA = remote.nativeImage.createFromPath(pathI.join(__dirname, "images/icon.ico"))
 
 document.getElementById('startGameBtn').addEventListener('click', createGame);
 document.getElementById('startGameBackBtn').addEventListener('click', backToMain);
