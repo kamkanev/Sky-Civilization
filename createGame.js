@@ -1,19 +1,32 @@
 const { remote } = require('electron');
 const { BrowserWindow } = require('electron').remote;
+const fs = require('fs');
 
 
-document.getElementById('exit').addEventListener('click', exit);
-document.getElementById('new-game').addEventListener('click', createNewGame);
+document.getElementById('startGameBtn').addEventListener('click', createGame);
 
 function exit() {
   var window = remote.getCurrentWindow();
        window.close();
 }
 
-function createNewGame() {
+function createFile() {
+  let student = {
+    name: 'Mike',
+    age: 23,
+    gender: 'Male',
+    department: 'English',
+    car: 'Honda'
+};
+
+let data = JSON.stringify(student);
+fs.writeFileSync('saves/student-2.json', data);
+}
+
+function createGame() {
 
   let win = new BrowserWindow({
-    width: 410,
+    width: 800,
      height: 600,
      resizable: false,
      webPreferences: {
