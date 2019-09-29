@@ -1,3 +1,11 @@
+.mainMenuTitle {
+    margin: 60px 0;
+}
+
+.mainMenu {
+    margin-top: 80px;
+}
+
 .mainMenu a {
     margin-bottom: 20px;
 }
