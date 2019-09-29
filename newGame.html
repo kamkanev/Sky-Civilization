@@ -13,18 +13,38 @@
     <script src="https://kit.fontawesome.com/70bfa5ee7d.js"></script>
 </head>
 <body>
-    <div class="row">
-        <div class="col-lg-1">
-            <label for="race">Race</label>
-            <ul class="list-group" type="none">
-                <li><label><input type="radio" name="race" value="white"> White</label></li>
-            </ul>
+    <form action="post">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <label for="race">Race:</label>
+                    <ul class="list-group" type="none">
+                        <li><label class="d-block"><input type="radio" name="race" value="white"> White</label></li>
+                        <li><label class="d-block"><input type="radio" name="race" value="black"> Black</label></li>
+                        <li><label class="d-block"><input type="radio" name="race" value="asian"> Asian</label></li>
+                    </ul>
+    
+                    <label for="gender" id="genderLabel">Gender:</label> <br>
+                    <label id="maleGenderRadioLabel"><input type="radio" name="gender" value="male"> Male</label><label><input type="radio" name="gender" value="female"> Female</label>
+                </div>
+                <div class="col-6">
+                    <img class="newGameCharacterImageShower" src="Images/120-1209192_free-sexy-ass-model-01-sexy-ass-model.png" alt="test" height="200px" width="150px">
+                </div>
+                
+            </div>
         </div>
-        <div class="col-lg-1"></div>
-    </div>
-    <div>
-        <a id="startGameBtn" class="btn btn-primary">Start!</a>
-    </div>
+    
+        <div class="container mainMenuFooterPart">
+            <div class="row">
+                <div class="col-9">
+                    <a id="startGameBackBtn" class="btn btn-danger">Back</a>
+                </div>
+                <div class="col-3">
+                    <input type="submit" id="startGameBtn" class="btn btn-primary" value="Start">
+                </div>
+            </div>
+        </div>
+    </form>
 
     <script src="createGame.js"></script>
 </body>

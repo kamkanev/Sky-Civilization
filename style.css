@@ -9,3 +9,19 @@
 .mainMenu a {
     margin-bottom: 20px;
 }
+
+#maleGenderRadioLabel {
+    margin-right: 15px;
+}
+
+#genderLabel {
+    margin-top: 22px;
+}
+
+.newGameCharacterImageShower {
+    border: 1px solid black;
+}
+
+.mainMenuFooterPart {
+    margin-top: 30px;
+}
