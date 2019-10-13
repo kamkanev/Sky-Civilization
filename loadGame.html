@@ -1,0 +1,20 @@
+<script type="text/javascript">
+  const fs = require('fs');
+
+  var data = getFiles();
+
+  var row1 = loadGame(data[0]);
+
+  function loadGame(fileName) {
+    let rawdata = fs.readFileSync('saves/'+fileName);
+    let data = JSON.parse(rawdata);
+
+    return data;
+
+  }
+
+function getFiles(dir = './saves') {
+  return fs.readdirSync(dir);
+}
+
+</script>
