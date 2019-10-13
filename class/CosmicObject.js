@@ -13,3 +13,5 @@ class CosmicObject {
 
   }
 }
+
+module.exports = CosmicObject;
