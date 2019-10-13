@@ -46,14 +46,20 @@ let system = document.getElementById('solarSystemName').value;
 
   let game = {
     system: system,
-    age: 23,
-    gender: 'Male',
-    department: 'English',
-    car: 'Honda'
+    planets: [],
+    sun: []
 };
 
 let data = JSON.stringify(game);
 fs.writeFileSync('saves/'+system+'.json', data);
+
+  let save = {
+    load: 'saves/'+system+'.json'
+};
+
+let datas = JSON.stringify(save);
+fs.writeFileSync('currentSave.json', datas);
+
 }
 
 function createGame() {
