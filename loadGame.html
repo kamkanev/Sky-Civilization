@@ -1,9 +1,82 @@
 <script type="text/javascript">
+  const { remote } = require('electron');
+  const { BrowserWindow } = require('electron').remote;
   const fs = require('fs');
+  var pathI = require('path');
+
+  let iconA = remote.nativeImage.createFromPath(pathI.join(__dirname, "images/icon.ico"))
 
   var data = getFiles();
 
   var row1 = loadGame(data[0]);
+
+  function exit() {
+    var window = remote.getCurrentWindow();
+         window.close();
+  }
+
+  function backToMain() {
+    let win = new BrowserWindow({
+      width: 800,
+       height: 600,
+       resizable: false,
+        icon: iconA,
+       webPreferences: {
+               nodeIntegration: true
+           }
+      });
+    win.loadFile('index.html');
+
+    win.setMenuBarVisibility(false)
+
+    // Open the DevTools.
+     win.webContents.openDevTools()
+
+    // Emitted when the window is closed.
+    win.on('closed', function () {
+      // Dereference the window object, usually you would store windows
+      // in an array if your app supports multi windows, this is the time
+      // when you should delete the corresponding element.
+      win = null
+    })
+      exit();
+  }
+
+  function startGame(file) {
+    console.log(file);
+
+    let save = {
+      load: 'saves/'+file+''
+  };
+
+  let datas = JSON.stringify(save);
+  fs.writeFileSync('currentSave.json', datas);
+
+    let win = new BrowserWindow({
+      width: 1280,
+       height: 720,
+       resizable: false,
+        icon: iconA,
+       webPreferences: {
+               nodeIntegration: true
+           }
+      });
+    win.loadFile('start.html');
+
+    //win.setMenuBarVisibility(false)
+
+    // Open the DevTools.
+     win.webContents.openDevTools()
+
+    // Emitted when the window is closed.
+    win.on('closed', function () {
+      // Dereference the window object, usually you would store windows
+      // in an array if your app supports multi windows, this is the time
+      // when you should delete the corresponding element.
+      win = null
+    })
+      exit();
+  }
 
   function loadGame(fileName) {
     let rawdata = fs.readFileSync('saves/' + fileName);
@@ -31,7 +104,7 @@
       th.scope = 'row';
       th.innerText = i + 1;
       td.innerText = file.system;
-      td2.innerHTML = '<input type="submit" class="btn btn-success" value="Play">';
+      td2.innerHTML = '<input type="submit" onclick="startGame(`'+data[i]+'`)" class="btn btn-success" value="Play">';
 
       tr.appendChild(th);
       tr.appendChild(td);
@@ -40,6 +113,8 @@
       tbody.appendChild(tr);
     }
   }
+
+  //document.getElementById('play').addEventListener('click', startGame);
 
 </script>
 
@@ -81,7 +156,7 @@
     </tbody>
   </table>
 
-  <input type="submit" class="btn btn-danger" value="Back">
+  <input type="submit" onclick="backToMain()" class="btn btn-danger" value="Back">
 </body>
 
 </html>
