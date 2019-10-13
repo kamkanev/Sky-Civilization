@@ -58,15 +58,15 @@ function createGame() {
   createFile();
 
   let win = new BrowserWindow({
-    width: 800,
-     height: 600,
+    width: 1280,
+     height: 720,
      resizable: false,
       icon: iconA,
      webPreferences: {
              nodeIntegration: true
          }
     });
-  win.loadFile('newGame.html');
+  win.loadFile('start.html');
 
   win.setMenuBarVisibility(false)
 

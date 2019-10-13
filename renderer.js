@@ -17,7 +17,7 @@ function createNewGame() {
 
   let win = new BrowserWindow({
     width: 410,
-     height: 600,
+     height: 200,
      resizable: false,
      icon: iconA,
      webPreferences: {
