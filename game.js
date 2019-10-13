@@ -42,6 +42,10 @@ function loadGame() {
 
 function saveGame(game) {
 
-  let data = JSON.stringify(game);
-  fs.writeFileSync('saves/'+game.system+'.json', data);
+  let data = JSON.stringify(game, null, 2);
+
+  fs.writeFile('saves/'+game.system+'.json', data, (err) => {
+    if (err) throw err;
+    console.log('Data written to file');
+  });
 }
