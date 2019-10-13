@@ -11,7 +11,6 @@
 </head>
 <body onload="init()">
     <canvas id="canvas-id"/>
-    <script src="game.js"></script>
     <script>
         if(endlessCanvas == undefined){
             var endlessCanvas = false;
@@ -27,11 +26,11 @@
             };
         }
         else
-        {   
-            canvas.width = 800;
-            canvas.height = 600;
+        {
+            canvas.width = 1280;
+            canvas.height = 720;
         }
-        var context = canvas.getContext("2d");  
+        var context = canvas.getContext("2d");
         context.fillStyle = "#0000ff";
         // global variables with mouse coordinates
         var mouseX = 0;
@@ -179,5 +178,7 @@
         };
 
     </script>
+    <script src="class/CosmicObject.js"></script>
+    <script src="game.js"></script>
 </body>
 </html>

@@ -41,8 +41,11 @@ function backToMain() {
 }
 
 function createFile() {
+
+let system = document.getElementById('solarSystemName').value;
+
   let game = {
-    name: 'Mike',
+    system: system,
     age: 23,
     gender: 'Male',
     department: 'English',
@@ -50,7 +53,7 @@ function createFile() {
 };
 
 let data = JSON.stringify(game);
-fs.writeFileSync('saves/student-2.json', data);
+fs.writeFileSync('saves/'+system+'.json', data);
 }
 
 function createGame() {
@@ -68,7 +71,7 @@ function createGame() {
     });
   win.loadFile('start.html');
 
-  win.setMenuBarVisibility(false)
+  //win.setMenuBarVisibility(false)
 
   // Open the DevTools.
    win.webContents.openDevTools()

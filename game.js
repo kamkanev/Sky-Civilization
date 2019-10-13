@@ -1,4 +1,6 @@
 ﻿// Creating variables
+const WIDTH = canvas.width;
+const HEIGHT = canvas.height;
 var myX = 0, myY = 0;
 
 function update() {
