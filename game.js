@@ -3,6 +3,8 @@ const fs = require('fs');
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
 
+const Planet = require('./class/Planet.js');
+
 var game = loadGame();
 console.log(game);
 var myX = 0, myY = 0;

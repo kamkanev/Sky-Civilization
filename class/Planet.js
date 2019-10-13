@@ -1,4 +1,4 @@
-require('CosmicObject');
+const CosmicObject = require('./CosmicObject.js');
 
 class Planet extends CosmicObject {
   constructor(x, y, src, size, type) {

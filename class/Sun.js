@@ -1,4 +1,4 @@
-require('CosmicObject');
+var CosmicObject = require('./CosmicObject.js');
 
 class Sun extends CosmicObject {
     constructor(x, y, src, size, type) {
