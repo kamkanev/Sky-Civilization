@@ -40,7 +40,11 @@ function keyup(key) {
 function mouseup() {
   if(exitB.isItOnTheButton(mouseX, mouseY, 1, 1)){
     // isAllSaved(game);
+    if(isAllSaved()){
     exit();
+  }else{
+    Swal.fire("are you sure");
+  }
   }
   if(saveB.isItOnTheButton(mouseX, mouseY, 1, 1)){
     saveGame(game);
