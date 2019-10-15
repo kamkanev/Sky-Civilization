@@ -3,7 +3,7 @@ const { BrowserWindow } = require('electron').remote;
 const fs = require('fs');
 var pathI = require('path');
 
-let iconA = remote.nativeImage.createFromPath(pathI.join(__dirname, "images/icon.ico"))
+let iconA = remote.nativeImage.createFromPath(pathI.join(__dirname, "Images/icon.ico"))
 
 document.getElementById('startGameBtn').addEventListener('click', createGame);
 document.getElementById('startGameBackBtn').addEventListener('click', backToMain);
@@ -43,11 +43,13 @@ function backToMain() {
 function createFile() {
 
 let system = document.getElementById('solarSystemName').value;
+let date = new Date();
 
   let game = {
     system: system,
     planets: [],
-    sun: []
+    sun: [],
+    saved: date
 };
 
 let data = JSON.stringify(game);
@@ -77,7 +79,7 @@ function createGame() {
     });
   win.loadFile('start.html');
 
-  //win.setMenuBarVisibility(false)
+  win.setMenuBarVisibility(false)
 
   // Open the DevTools.
    win.webContents.openDevTools()

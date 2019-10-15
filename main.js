@@ -6,7 +6,7 @@ var pathI = require('path');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
-let iconA = require('electron').nativeImage.createFromPath(pathI.join(__dirname, "images/icon.ico"))
+let iconA = require('electron').nativeImage.createFromPath(pathI.join(__dirname, "Images/icon.ico"))
 
 
 function createWindow () {

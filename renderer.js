@@ -2,7 +2,7 @@ const { remote } = require('electron');
 const { BrowserWindow } = require('electron').remote;
 var pathI = require('path');
 
-let iconA = remote.nativeImage.createFromPath(pathI.join(__dirname, "images/icon.ico"))
+let iconA = remote.nativeImage.createFromPath(pathI.join(__dirname, "Images/icon.ico"))
 
 
 document.getElementById('exit').addEventListener('click', exit);

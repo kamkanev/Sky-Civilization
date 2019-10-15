@@ -1,13 +1,20 @@
 ﻿// Creating variables
-const fs = require('fs');
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
 
 const Planet = require('./class/Planet.js');
+const Button = require('./class/JsButton.js');
 
 var game = loadGame();
 console.log(game);
+//💾
+var exitB = new Button(WIDTH - 70, HEIGHT - 50, 70, 50, Button.DANGER, "Exit");
+exitB.font = 22;
+var saveB = new Button(exitB.x - exitB.sizeX, exitB.y, 70, 50, Button.SUCCESS, "💾");
+
 var myX = 0, myY = 0;
+var bg = new Image();
+bg.src = "Images/space_bg.jpg";
 
 function update() {
     myX = myX+(mouseX-myX)/10;
@@ -16,7 +23,13 @@ function update() {
 
 function draw() {
     // This is how you draw a rectangle
+    context.drawImage(bg, 0, 0, WIDTH, HEIGHT);
+
+
     context.fillRect(myX, myY, 30, 30);
+    exitB.draw();
+    saveB.draw();
+
 };
 
 function keyup(key) {
@@ -25,29 +38,13 @@ function keyup(key) {
 };
 
 function mouseup() {
+  if(exitB.isItOnTheButton(mouseX, mouseY, 1, 1)){
+    // isAllSaved(game);
+    exit();
+  }
+  if(saveB.isItOnTheButton(mouseX, mouseY, 1, 1)){
+    saveGame(game);
+  }
     // Show coordinates of mouse on click
     console.log("Mouse clicked at", mouseX, mouseY);
 };
-
-//file stuff
-
-function loadGame() {
-  let rawdata = fs.readFileSync('currentSave.json');
-  let data = JSON.parse(rawdata);
-
-  rawdata = fs.readFileSync(data.load);
-  data = JSON.parse(rawdata);
-
-  return data;
-
-}
-
-function saveGame(game) {
-
-  let data = JSON.stringify(game, null, 2);
-
-  fs.writeFile('saves/'+game.system+'.json', data, (err) => {
-    if (err) throw err;
-    console.log('Data written to file');
-  });
-}

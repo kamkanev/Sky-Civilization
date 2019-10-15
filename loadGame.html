@@ -4,7 +4,7 @@
   const fs = require('fs');
   var pathI = require('path');
 
-  let iconA = remote.nativeImage.createFromPath(pathI.join(__dirname, "images/icon.ico"))
+  let iconA = remote.nativeImage.createFromPath(pathI.join(__dirname, "Images/icon.ico"))
 
   var data = getFiles();
 
@@ -63,7 +63,7 @@
       });
     win.loadFile('start.html');
 
-    //win.setMenuBarVisibility(false)
+    win.setMenuBarVisibility(false)
 
     // Open the DevTools.
      win.webContents.openDevTools()
@@ -76,6 +76,13 @@
       win = null
     })
       exit();
+  }
+
+  function delteGame(fileName) {
+    fs.unlink('saves/'+fileName, (err) => {
+        if (err) throw err;
+        console.log('path/'+fileName+' was deleted');
+    });
   }
 
   function loadGame(fileName) {
