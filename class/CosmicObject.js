@@ -1,8 +1,10 @@
 class CosmicObject {
-  constructor(x, y, src, size) {
+  constructor(x, y, src, size, name) {
     this.x = x;
     this.y = y;
+    this.name = name;
     this.size = size;
+    this.configMenu = false;
     this.src = new Image();
     this.src.src = src;
   }

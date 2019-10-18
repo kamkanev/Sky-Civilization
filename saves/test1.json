@@ -1,6 +1,14 @@
 {
   "system": "test1",
   "planets": [],
-  "sun": [],
+  "sun": [
+    {
+      "type": 0,
+      "x": 320,
+      "y": 0,
+      "name": "PR1iq-69",
+      "lines": 8
+    }
+  ],
   "saved": "2019-10-15T08:54:14.791Z"
 }

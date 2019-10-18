@@ -67,3 +67,56 @@ function isAllSaved(currentGame) {
 
   return false;
 }
+
+function randomString(l) {
+
+  var result = '';
+  var chars = 'QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm-_0123456789';
+  var charsL = chars.length;
+  for(var i = 0; i < l; i++){
+    result+= chars.charAt(Math.floor(Math.random() * charsL));
+  }
+
+  return result;
+
+}
+
+function isSystemExists(game) {
+
+  if(game.sun.length == 0 && game.planets.length == 0){
+    return false;
+  }
+
+  return true;
+
+}
+
+function isThereASun(game) {
+
+  if(game.sun.length == 0){
+    return false;
+  }
+
+  return true;
+
+}
+
+async function renameItem(name = "") {
+  var {value: newName} = await Swal.fire({
+  title: 'Enter new name',
+  input: 'text',
+  inputValue: name,
+  showCancelButton: true,
+  inputValidator: (value) => {
+    if (!value) {
+      return 'You need to write something!'
+    }
+
+  }
+});
+
+if(newName){
+  return newName;
+}
+
+}
