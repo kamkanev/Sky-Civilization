@@ -50,7 +50,7 @@ var planetCreateList = [
 planetCreateList.push(new SideItem(planetCreateList[0].x, planetCreateList[0].y + planetCreateList[0].sizeY + 10, planetCreateList[0].sizeX, planetCreateList[0].sizeY, "Ice giant"));
 planetCreateList.push(new SideItem(planetCreateList[1].x, planetCreateList[1].y + planetCreateList[1].sizeY + 10, planetCreateList[1].sizeX, planetCreateList[1].sizeY, "Carbon planet"));
 planetCreateList.push(new SideItem(planetCreateList[2].x, planetCreateList[2].y + planetCreateList[2].sizeY + 10, planetCreateList[2].sizeX, planetCreateList[2].sizeY, "Ocean planet"));
-planetCreateList.push(new SideItem(planetCreateList[3].x, planetCreateList[3].y + planetCreateList[3].sizeY + 10, planetCreateList[3].sizeX, planetCreateList[3].sizeY, "Solid planet"));
+planetCreateList.push(new SideItem(planetCreateList[3].x, planetCreateList[3].y + planetCreateList[3].sizeY + 10, planetCreateList[3].sizeX, planetCreateList[3].sizeY, "Solid giant"));
 planetCreateList.push(new SideItem(planetCreateList[4].x, planetCreateList[4].y + planetCreateList[4].sizeY + 10, planetCreateList[4].sizeX, planetCreateList[4].sizeY, "Terrestial planet"));
 
 var sunCreateList = [
@@ -283,7 +283,30 @@ function mouseup() {
   }
 
   if(isPointInCircle(infoB.x, infoB.y, mouseX, mouseY, infoB.sizeX)){
-    alert("VASEEEEEE")
+    //config.object
+    if (configObject != undefined) {
+      if (sunOrPlanet == 'sun') {
+        fs.readFile('info/Suns/' + configObject.type + '.txt', 'utf8', function(err, content) {
+          if (content != undefined) {
+            Swal.fire({
+              type: 'info',
+              title: 'Sun Info',
+              text: content
+            });
+          }
+        });
+      } else if (sunOrPlanet == "planet") {
+        fs.readFile('info/Planets/' + configObject.type + '.txt', 'utf8', function(err, content) {
+          if (content != undefined) {
+            Swal.fire({
+              type: 'info',
+              title: 'Planet Info',
+              text: content
+            });
+          }
+        });
+      }
+    }
   }
 
   if(createB.isItOnTheButton(mouseX, mouseY, 1, 1) && newOrUpdate == "new" && configMenu){
@@ -313,13 +336,18 @@ function mouseup() {
           flag++;
         }
       }
+
+      if (sun[0].lines > configObject.orbit) {
+        flag++;
+      }
+
       if(flag == 0){
       game.planets.push(planet);
     }else{
       Swal.fire({
         type: 'error',
         title: 'Oops...',
-        text: 'There is already a planet in this orbit!'
+        text: 'You cannot put a planet in that orbit.'
       });
     }
     }

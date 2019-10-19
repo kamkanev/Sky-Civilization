@@ -18,6 +18,12 @@
       "name": "_oPBR",
       "type": 3,
       "size": 100
+    },
+    {
+      "orbit": 7,
+      "name": "z7aBT",
+      "type": 0,
+      "size": 100
     }
   ],
   "sun": [
@@ -26,7 +32,7 @@
       "y": 360,
       "type": 0,
       "name": "Moon",
-      "lines": 6
+      "lines": 7
     }
   ],
   "saved": "2019-10-19T09:57:36.866Z"
