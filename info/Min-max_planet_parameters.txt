@@ -1,0 +1,3 @@
+1 700 km smallest non giant planet
+6 800 km smallest giant planet
+139 822 km largest planet possible before becomming a star.
