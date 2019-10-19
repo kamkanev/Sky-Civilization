@@ -112,8 +112,8 @@
       th.scope = 'row';
       th.innerText = i + 1;
       td.innerText = file.system;
-      td2.innerHTML = '<input type="submit" onclick="deleteGame(`'+data[i]+'`)" class="btn btn-danger" value="Delete">';
-      td2.innerHTML += '<input type="submit" onclick="startGame(`'+data[i]+'`)" class="btn btn-success" value="Play">';
+      td2.innerHTML = '<input type="submit" style="margin-right: 25px;" onclick="startGame(`'+data[i]+'`)" class="btn btn-success" value="Play">';
+      td2.innerHTML += '<input type="submit" onclick="deleteGame(`'+data[i]+'`)" class="btn btn-danger" value="Delete">';
 
       tr.appendChild(th);
       tr.appendChild(td);
