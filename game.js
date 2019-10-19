@@ -390,7 +390,7 @@ function mouseup() {
       type: 'error',
       title: 'Oops...',
       text: 'There is no sun!',
-      footer: '<p style="color: blue;">Create first sun and then add planets!</p>'
+      footer: '<p style="color: blue;">First create a sun and then add planets!</p>'
     })
   }
 
