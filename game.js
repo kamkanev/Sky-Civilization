@@ -33,6 +33,8 @@ configB.setAlpha(0.4);
 var renameB = new Button(configB.x + 5, configB.y + configB.sizeY + 5, configB.sizeX - 10, configB.sizeY - 10, Button.DANGER, "Rename");
 renameB.setAlpha(0.4);
 
+var setLinesButton = new SideItem(renameB.sizeX / 2, renameB.y + renameB.sizeY + 10, renameB.sizeX/2, renameB.sizeY, "Set orbits");
+
 var backB = new Button(addB.x, addB.y + addB.sizeY, addB.sizeX/2, addB.sizeY, Button.NORMAL, "↩");
 backB.font = 30;
 
@@ -209,6 +211,16 @@ function draw() {
         }
 
         renameB.draw();
+        if(sunOrPlanet == "sun"){
+
+          context.textAlign="center";
+          context.textBaseline = "middle";
+          context.fillStyle = "white";
+          context.font = "30px Arial";
+          context.fillText(configObject.lines, (setLinesButton.x/2), setLinesButton.y + setLinesButton.sizeY/2);
+          setLinesButton.draw();
+
+        }
 
         configObject.draw();
 
