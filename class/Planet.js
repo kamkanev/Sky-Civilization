@@ -8,6 +8,10 @@ class Planet extends CosmicObject {
       src = "Images/planets/c_planet.png"
     }else if(type == 3){
       src = "Images/planets/o_planet.png"
+    }else if(type == 4){
+
+    }else if(type == 5){
+      src = "Images/planets/t_planet.png"
     }
     super(x, y, src, size, name);
     super.configMenu = false;
