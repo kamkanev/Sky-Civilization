@@ -33,7 +33,8 @@ configB.setAlpha(0.4);
 var renameB = new Button(configB.x + 5, configB.y + configB.sizeY + 5, configB.sizeX - 10, configB.sizeY - 10, Button.DANGER, "Rename");
 renameB.setAlpha(0.4);
 
-var setLinesButton = new SideItem(renameB.sizeX / 2, renameB.y + renameB.sizeY + 10, renameB.sizeX/2, renameB.sizeY, "Set orbits");
+var setLinesButton = new SideItem(renameB.sizeX / 2, renameB.y + renameB.sizeY + 10, renameB.sizeX/2, renameB.sizeY, "Select orbit");
+var selectOrbit = setLinesButton;
 
 var backB = new Button(addB.x, addB.y + addB.sizeY, addB.sizeX/2, addB.sizeY, Button.NORMAL, "↩");
 backB.font = 30;
@@ -48,10 +49,9 @@ var planetCreateList = [
 ];
 planetCreateList.push(new SideItem(planetCreateList[0].x, planetCreateList[0].y + planetCreateList[0].sizeY + 10, planetCreateList[0].sizeX, planetCreateList[0].sizeY, "Ice giant"));
 planetCreateList.push(new SideItem(planetCreateList[1].x, planetCreateList[1].y + planetCreateList[1].sizeY + 10, planetCreateList[1].sizeX, planetCreateList[1].sizeY, "Carbon planet"));
-planetCreateList.push(new SideItem(planetCreateList[2].x, planetCreateList[2].y + planetCreateList[2].sizeY + 10, planetCreateList[2].sizeX, planetCreateList[2].sizeY, "Iron planet"));
-planetCreateList.push(new SideItem(planetCreateList[3].x, planetCreateList[3].y + planetCreateList[3].sizeY + 10, planetCreateList[3].sizeX, planetCreateList[3].sizeY, "Ocean planet"));
-planetCreateList.push(new SideItem(planetCreateList[4].x, planetCreateList[4].y + planetCreateList[4].sizeY + 10, planetCreateList[4].sizeX, planetCreateList[4].sizeY, "Solid planet"));
-planetCreateList.push(new SideItem(planetCreateList[5].x, planetCreateList[5].y + planetCreateList[5].sizeY + 10, planetCreateList[5].sizeX, planetCreateList[5].sizeY, "Terrestial planet"));
+planetCreateList.push(new SideItem(planetCreateList[2].x, planetCreateList[2].y + planetCreateList[2].sizeY + 10, planetCreateList[2].sizeX, planetCreateList[2].sizeY, "Ocean planet"));
+planetCreateList.push(new SideItem(planetCreateList[3].x, planetCreateList[3].y + planetCreateList[3].sizeY + 10, planetCreateList[3].sizeX, planetCreateList[3].sizeY, "Solid planet"));
+planetCreateList.push(new SideItem(planetCreateList[4].x, planetCreateList[4].y + planetCreateList[4].sizeY + 10, planetCreateList[4].sizeX, planetCreateList[4].sizeY, "Terrestial planet"));
 
 var sunCreateList = [
   new SideItem(addB.x + 5, backB.y + addB.sizeY + 10, addB.sizeX-10, addB.sizeY - 5, "Main sequence sun")
@@ -83,6 +83,12 @@ function update() {
       saveB.setAlpha(0.7)
     }else{
       saveB.setAlpha(0.4)
+    }
+
+    if(infoB.flag){
+      infoB.setAlpha(0.7)
+    }else{
+      infoB.setAlpha(0.4)
     }
 
     if(createB.flag){
@@ -226,6 +232,13 @@ function draw() {
           context.fillText(configObject.lines, (setLinesButton.x/2), setLinesButton.y + setLinesButton.sizeY/2);
           setLinesButton.draw();
 
+        }else if(sunOrPlanet == "planet"){
+          context.textAlign="center";
+          context.textBaseline = "middle";
+          context.fillStyle = "white";
+          context.font = "30px Arial";
+          context.fillText(configObject.orbit, (setLinesButton.x/2), setLinesButton.y + setLinesButton.sizeY/2);
+          selectOrbit.draw();
         }
 
         configObject.draw();
@@ -269,6 +282,10 @@ function mouseup() {
     saveGame(game);
   }
 
+  if(isPointInCircle(infoB.x, infoB.y, mouseX, mouseY, infoB.sizeX)){
+    alert("VASEEEEEE")
+  }
+
   if(createB.isItOnTheButton(mouseX, mouseY, 1, 1) && newOrUpdate == "new" && configMenu){
     if(sunOrPlanet == "sun"){
       if(!isThereSun){
@@ -283,6 +300,28 @@ function mouseup() {
         //sun.push(sunO);
         isThereSun = true;
       }
+    }else if(sunOrPlanet == "planet"){
+      var planet = {
+        orbit: configObject.orbit,
+        name: configObject.name,
+        type: configObject.type,
+        size: 100
+      };
+      var flag = 0;
+      for (var i = 0; i < planets.length; i++) {
+        if(planets[i].orbit == configObject.orbit){
+          flag++;
+        }
+      }
+      if(flag == 0){
+      game.planets.push(planet);
+    }else{
+      Swal.fire({
+        type: 'error',
+        title: 'Oops...',
+        text: 'There is already a planet in this orbit!'
+      });
+    }
     }
 
     addB.clicked = false;
@@ -316,6 +355,15 @@ function mouseup() {
         //sunO = game.sun;
         isThereSun = true;
       }
+    }else if(sunOrPlanet == "planet"){
+      var planet = {
+        orbit: configObject.orbit,
+        name: configObject.name,
+        type: configObject.type
+      };
+
+
+      //game.planets
     }
 
     addB.clicked = false;
@@ -449,6 +497,16 @@ function mouseup() {
 
   }
 
+  if(selectOrbit.isItOnTheItem(mouseX, mouseY, 1, 1) && configObject != undefined && configMenu && sunOrPlanet == "planet"){
+
+    var newOrbit = setOrbit(configObject.orbit, sun[0].lines, planets).then((orbit) => {
+      configObject.orbit = orbit;
+    });
+    mouseX = -10;
+    mouseY = -10;
+
+  }
+
 
   for (var i = 0; i < sun.length; i++) {
     var nSun = new RealSun(sun[i].x, sun[i].y, sun[i].type, sun[i].name, sun[i].lines);
@@ -496,6 +554,15 @@ function mousemove() {
   }else{
     createB.setBorder(false);
     createB.flag = false;
+  }
+
+  if(isPointInCircle(infoB.x, infoB.y, mouseX, mouseY, infoB.sizeX)){
+
+    infoB.flag = true;
+    infoB.setBorder(true);
+  }else{
+    infoB.setBorder(false);
+    infoB.flag = false;
   }
 
   if(updateB.isItOnTheButton(mouseX, mouseY, 1, 1)){

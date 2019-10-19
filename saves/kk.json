@@ -1,13 +1,32 @@
 {
   "system": "kk",
-  "planets": [],
+  "planets": [
+    {
+      "orbit": 2,
+      "name": "0UlXm",
+      "type": 1,
+      "size": 100
+    },
+    {
+      "orbit": 1,
+      "name": "Du_i_do",
+      "type": 4,
+      "size": 100
+    },
+    {
+      "orbit": 3,
+      "name": "_oPBR",
+      "type": 3,
+      "size": 100
+    }
+  ],
   "sun": [
     {
       "x": 640,
       "y": 360,
       "type": 0,
       "name": "Moon",
-      "lines": 8
+      "lines": 6
     }
   ],
   "saved": "2019-10-19T09:57:36.866Z"

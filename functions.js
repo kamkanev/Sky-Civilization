@@ -107,6 +107,18 @@ function isThereASun(game) {
 
 }
 
+function isPointInCircle(xc, yc, xp, yp, r) {
+
+  var d = Math.sqrt(Math.pow((xp - xc), 2) + Math.pow((yp - yc), 2));
+
+  if(Math.pow(d, 2) <= Math.pow(r, 2)){
+    return true;
+  }
+
+  return false;
+
+}
+
 async function renameItem(name = "") {
   var {value: newName} = await Swal.fire({
   title: 'Enter new name',
@@ -139,6 +151,32 @@ async function setOrbits(lines = 8) {
     inputValidator: (value) => {
       if(parseInt(value)<1 || value >10){
         return 'The number must be between 1 and 10!';
+      }
+    }
+  });
+
+  if(newLines != undefined){
+    return parseInt(newLines);
+  }
+  return lines;
+
+}
+
+async function setOrbit(lines = 3, doLiniq = 8, planets) {
+
+  var {value: newLines} = await Swal.fire({
+    title: "Enter an orbit",
+    input: 'number',
+    inputValue: lines,
+    showCancelButton: true,
+    inputValidator: (value) => {
+      if(parseInt(value) < 1 || parseInt(value) > doLiniq){
+        return 'The number must be between 1 and '+doLiniq+'!';
+      }
+      for (var i = 0; i < planets.length; i++) {
+        if(planets[i].orbit == parseInt(value)){
+          return 'There is already a planet in this orbit!';
+        }
       }
     }
   });
