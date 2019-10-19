@@ -121,9 +121,32 @@ async function renameItem(name = "") {
   }
 });
 
-if(newName){
+if(newName != undefined){
   return newName;
 }
+
+return name;
+
+}
+
+async function setOrbits(lines = 8) {
+
+  var {value: newLines} = await Swal.fire({
+    title: "Enter number of orbits",
+    input: 'number',
+    inputValue: lines,
+    showCancelButton: true,
+    inputValidator: (value) => {
+      if(parseInt(value)<1 || value >10){
+        return 'The number must be between 1 and 10!';
+      }
+    }
+  });
+
+  if(newLines != undefined){
+    return parseInt(newLines);
+  }
+  return lines;
 
 }
 

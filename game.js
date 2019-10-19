@@ -144,6 +144,12 @@ function update() {
         sunCreateList[i].setAlpha(0.7);
       }
     }
+
+    if(setLinesButton.on){
+      setLinesButton.setAlpha(1);
+    }else{
+      setLinesButton.setAlpha(0.7);
+    }
 }
 
 function draw() {
@@ -233,6 +239,12 @@ function draw() {
 
     }else{
 
+      context.textAlign="center";
+      context.textBaseline = "middle";
+      context.fillStyle = "white";
+      context.font = "30px Arial";
+      context.fillText(game.system, WIDTH/2, addB.sizeY/2);
+
       for (var i = 0; i < sun.length; i++) {
         drawObj(sun[i], "sun");
       }
@@ -299,8 +311,9 @@ function mouseup() {
           name: configObject.name,
           lines: configObject.lines
         }
+        //alert(sunO.lines);
         game.sun[0] = sunO;
-        //sun.push(sunO);
+        //sunO = game.sun;
         isThereSun = true;
       }
     }
@@ -426,6 +439,17 @@ function mouseup() {
     }
   }
 
+  if(setLinesButton.isItOnTheItem(mouseX, mouseY, 1, 1) && configObject != undefined && configMenu && sunOrPlanet == "sun"){
+
+    var newLines = setOrbits(configObject.lines).then((lines) => {
+      configObject.lines = lines;
+    });
+    mouseX = -10;
+    mouseY = -10;
+
+  }
+
+
   for (var i = 0; i < sun.length; i++) {
     var nSun = new RealSun(sun[i].x, sun[i].y, sun[i].type, sun[i].name, sun[i].lines);
     if(areColliding(nSun.x, nSun.y, nSun.size, nSun.size, mouseX, mouseY, 1, 1) && !configMenu){
@@ -438,6 +462,7 @@ function mouseup() {
       sunOrPlanet = "sun";
       newOrUpdate = "update";
       configObject = new Sun(configB.sizeX+(addB.x - configB.sizeX)/2 - HEIGHT/2, 0, HEIGHT, nSun.type, nSun.name);
+      configObject.lines = nSun.lines;
     }
   }
     // Show coordinates of mouse on click
@@ -549,6 +574,15 @@ function mousemove() {
       sunCreateList[i].setBorder(false);
       sunCreateList[i].on = false;
     }
+  }
+
+  if(setLinesButton.isItOnTheItem(mouseX, mouseY, 1, 1)){
+
+    setLinesButton.on = true;
+    setLinesButton.setBorder(true);
+  }else{
+    setLinesButton.setBorder(false);
+    setLinesButton.on = false;
   }
 
     // Show coordinates of mouse on click
