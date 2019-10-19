@@ -1,16 +1,24 @@
 var CosmicObject = require('./CosmicObject.js');
 
-class Sun extends CosmicObject {
-    constructor(x, y, size = 150, type, name, src = "Images/suns/m_sun.png") {
+class RealSun extends CosmicObject {
+    constructor(x, y, type, name, lines) {
       //8
+      var size = 100, src = "Images/suns/m_sun.png";
+
       if(type == 0){
         src = "Images/suns/m_sun.png";
+        size = 100;
       }else if(type == 1){
-        src = "Images/suns/g_sun.png"
+        src = "Images/suns/g_sun.png";
+        size = 50;
       }
+
+      x -= size/2;
+      y -= size/2;
+
         super(x, y, src, size, name);
         super.configMenu = false;
-        this.lines = 8;
+        this.lines = lines;
         this.type = type;
     }
 
@@ -19,4 +27,4 @@ class Sun extends CosmicObject {
     }
 }
 
-module.exports = Sun;
+module.exports = RealSun;

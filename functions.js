@@ -3,6 +3,12 @@ const { remote } = require('electron');
 const { BrowserWindow } = require('electron').remote;
 var pathI = require('path');
 
+const Planet = require('./class/Planet.js');
+const Sun = require('./class/Sun.js');
+const Button = require('./class/JsButton.js');
+const SideItem = require('./class/SideItem.js');
+const RealSun = require('./class/RealSun.js');
+
 let iconA = remote.nativeImage.createFromPath(pathI.join(__dirname, "Images/icon.ico"))
 
 function loadGame() {
@@ -118,5 +124,17 @@ async function renameItem(name = "") {
 if(newName){
   return newName;
 }
+
+}
+
+function drawObj(obj, sunOrPlanet) {
+
+  if(sunOrPlanet == "sun"){
+
+    var nSun = new RealSun(obj.x, obj.y, obj.type, obj.name, obj.lines);
+
+    nSun.draw();
+
+  }
 
 }

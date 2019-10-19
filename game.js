@@ -2,11 +2,6 @@
 const WIDTH = canvas.width;
 const HEIGHT = canvas.height;
 
-const Planet = require('./class/Planet.js');
-const Sun = require('./class/Sun.js');
-const Button = require('./class/JsButton.js');
-const SideItem = require('./class/SideItem.js');
-
 var game = loadGame();
 console.log(game);
 
@@ -57,8 +52,11 @@ planetCreateList.push(new SideItem(planetCreateList[4].x, planetCreateList[4].y 
 planetCreateList.push(new SideItem(planetCreateList[5].x, planetCreateList[5].y + planetCreateList[5].sizeY + 10, planetCreateList[5].sizeX, planetCreateList[5].sizeY, "Terrestial planet"));
 
 var sunCreateList = [
-  new SideItem(addB.x + 5, backB.y + addB.sizeY + 10, addB.sizeX-10, addB.sizeY - 5, "Normal sun")
+  new SideItem(addB.x + 5, backB.y + addB.sizeY + 10, addB.sizeX-10, addB.sizeY - 5, "Main sequence sun")
 ];
+sunCreateList[0].font = 15;
+
+sunCreateList.push(new SideItem(sunCreateList[0].x, sunCreateList[0].y + sunCreateList[0].sizeY + 10, sunCreateList[0].sizeX, sunCreateList[0].sizeY, "Red dwarf sun"));
 
 var menuMainList = [
   new SideItem(addB.x + 5, addB.y + addB.sizeY + 10, addB.sizeX-10, addB.sizeY - 5, "Sun")
@@ -221,6 +219,12 @@ function draw() {
         context.fillText(configObject.name, configObject.x + configObject.size/2, configObject.y + 50);
       }
 
+    }else{
+
+      for (var i = 0; i < sun.length; i++) {
+        drawObj(sun[i], "sun");
+      }
+
     }
 
 };
@@ -233,7 +237,8 @@ function keyup(key) {
 function mouseup() {
   if(exitB.isItOnTheButton(mouseX, mouseY, 1, 1)){
     // isAllSaved(game);
-    exit();
+    //exit();
+    backToMain();
   }
 
   if(saveB.isItOnTheButton(mouseX, mouseY, 1, 1)){
@@ -243,15 +248,47 @@ function mouseup() {
   if(createB.isItOnTheButton(mouseX, mouseY, 1, 1) && newOrUpdate == "new" && configMenu){
     if(sunOrPlanet == "sun"){
       if(!isThereSun){
-        var sun = {
+        var sunO = {
+          x: WIDTH/2,
+          y: HEIGHT/2,
           type: configObject.type,
-          x: configObject.x,
-          y: configObject.y,
           name: configObject.name,
           lines: configObject.lines
         }
-        game.sun.push(sun);
-        sun.push(sun);
+        game.sun.push(sunO);
+        //sun.push(sunO);
+        isThereSun = true;
+      }
+    }
+
+    addB.clicked = false;
+    addB.text = "Add +";
+    addB.type = Button.NORMAL;
+    openCreateMenu = false;
+    openSunMenu = false;
+    openPlanetMenu = false;
+
+    configB.clicked = false;
+    configMenu = false;
+    configB.text = "Config V";
+
+    configObject = undefined;
+    newOrUpdate = "";
+
+  }
+
+  if(updateB.isItOnTheButton(mouseX, mouseY, 1, 1) && newOrUpdate == "update" && configMenu){
+    if(sunOrPlanet == "sun"){
+      if(isThereSun){
+        var sunO = {
+          x: WIDTH/2,
+          y: HEIGHT/2,
+          type: sun[0].type,
+          name: configObject.name,
+          lines: configObject.lines
+        }
+        game.sun[0] = sunO;
+        //sun.push(sunO);
         isThereSun = true;
       }
     }
@@ -370,10 +407,25 @@ function mouseup() {
       sunOrPlanet = "sun";
       newOrUpdate = "new";
       configMenu = true;
-      configObject = new Sun(configB.sizeX+(addB.x - configB.sizeX)/2 - HEIGHT/2, 0, HEIGHT, i, randomString(5), "Images/suns/m_sun.png");
+      configObject = new Sun(configB.sizeX+(addB.x - configB.sizeX)/2 - HEIGHT/2, 0, HEIGHT, i, randomString(5));
       mouseX = -10;
       mouseY = -10;
 
+    }
+  }
+
+  for (var i = 0; i < sun.length; i++) {
+    var nSun = new RealSun(sun[i].x, sun[i].y, sun[i].type, sun[i].name, sun[i].lines);
+    if(areColliding(nSun.x, nSun.y, nSun.size, nSun.size, mouseX, mouseY, 1, 1) && !configMenu){
+      mouseX = -10;
+      mouseY = -10;
+      configMenu = true;
+      configB.clicked = true;
+      configMenu = true;
+      configB.text = "Config ^";
+      sunOrPlanet = "sun";
+      newOrUpdate = "update";
+      configObject = new Sun(configB.sizeX+(addB.x - configB.sizeX)/2 - HEIGHT/2, 0, HEIGHT, nSun.type, nSun.name);
     }
   }
     // Show coordinates of mouse on click
