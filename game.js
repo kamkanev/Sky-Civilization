@@ -8,6 +8,8 @@ console.log(game);
 var sun = game.sun;
 var planets = game.planets;
 
+var zoomIndex = 0;
+
 var isThereSun = isThereASun(game);
 
 var exitB = new Button(WIDTH - 70, HEIGHT - 50, 70, 50, Button.DANGER, "Exit");
@@ -24,19 +26,25 @@ var addB = new Button(saveB.x, 0, 140, 50, Button.NORMAL, "Add +");
 addB.font = 30;
 addB.setAlpha(0.4);
 
-var infoB = new Button(addB.x-30, 25, 20, 15, Button.SUCCESS, "Info");
+var infoB = new Button(addB.x - 30, 25, 20, 15, Button.SUCCESS, "Info");
 infoB.font = 25;
 
 var configB = new Button(0, 0, 220, 50, Button.NORMAL, "Config V");
 configB.setAlpha(0.4);
 
+var zoomB = new Button(configB.x + 220, configB.y, 50, 50, Button.NORMAL, "+");
+zoomB.font = 40;
+
+var zoomOutB = new Button(zoomB.x + 75, zoomB.y, 50, 50, Button.NORMAL, "-");
+zoomOutB.font = 40;
+
 var renameB = new Button(configB.x + 5, configB.y + configB.sizeY + 5, configB.sizeX - 10, configB.sizeY - 10, Button.DANGER, "Rename");
 renameB.setAlpha(0.4);
 
-var setLinesButton = new SideItem(renameB.sizeX / 2, renameB.y + renameB.sizeY + 10, renameB.sizeX/2, renameB.sizeY, "Select orbit");
+var setLinesButton = new SideItem(renameB.sizeX / 2, renameB.y + renameB.sizeY + 10, renameB.sizeX / 2, renameB.sizeY, "Select orbit");
 var selectOrbit = setLinesButton;
 
-var backB = new Button(addB.x, addB.y + addB.sizeY, addB.sizeX/2, addB.sizeY, Button.NORMAL, "↩");
+var backB = new Button(addB.x, addB.y + addB.sizeY, addB.sizeX / 2, addB.sizeY, Button.NORMAL, "↩");
 backB.font = 30;
 
 var openCreateMenu = false;
@@ -45,7 +53,7 @@ var configMenu = false, sunOrPlanet = "";
 var configObject, newOrUpdate = "";
 
 var planetCreateList = [
-  new SideItem(addB.x + 5, backB.y + addB.sizeY + 10, addB.sizeX-10, addB.sizeY - 5, "Gas giant")
+  new SideItem(addB.x + 5, backB.y + addB.sizeY + 10, addB.sizeX - 10, addB.sizeY - 5, "Gas giant")
 ];
 planetCreateList.push(new SideItem(planetCreateList[0].x, planetCreateList[0].y + planetCreateList[0].sizeY + 10, planetCreateList[0].sizeX, planetCreateList[0].sizeY, "Ice giant"));
 planetCreateList.push(new SideItem(planetCreateList[1].x, planetCreateList[1].y + planetCreateList[1].sizeY + 10, planetCreateList[1].sizeX, planetCreateList[1].sizeY, "Carbon planet"));
@@ -54,239 +62,259 @@ planetCreateList.push(new SideItem(planetCreateList[3].x, planetCreateList[3].y 
 planetCreateList.push(new SideItem(planetCreateList[4].x, planetCreateList[4].y + planetCreateList[4].sizeY + 10, planetCreateList[4].sizeX, planetCreateList[4].sizeY, "Terrestial planet"));
 
 var sunCreateList = [
-  new SideItem(addB.x + 5, backB.y + addB.sizeY + 10, addB.sizeX-10, addB.sizeY - 5, "Main sequence sun")
+  new SideItem(addB.x + 5, backB.y + addB.sizeY + 10, addB.sizeX - 10, addB.sizeY - 5, "Main sequence sun")
 ];
 sunCreateList[0].font = 15;
 
 sunCreateList.push(new SideItem(sunCreateList[0].x, sunCreateList[0].y + sunCreateList[0].sizeY + 10, sunCreateList[0].sizeX, sunCreateList[0].sizeY, "Red dwarf sun"));
 
 var menuMainList = [
-  new SideItem(addB.x + 5, addB.y + addB.sizeY + 10, addB.sizeX-10, addB.sizeY - 5, "Sun")
+  new SideItem(addB.x + 5, addB.y + addB.sizeY + 10, addB.sizeX - 10, addB.sizeY - 5, "Sun")
 ];
-menuMainList.push(new SideItem(menuMainList[0].x, menuMainList[0].y + menuMainList[0].sizeY + 10, menuMainList[0].sizeX, menuMainList[0].sizeY , "Planet"));
+menuMainList.push(new SideItem(menuMainList[0].x, menuMainList[0].y + menuMainList[0].sizeY + 10, menuMainList[0].sizeX, menuMainList[0].sizeY, "Planet"));
 
 var myX = 0, myY = 0;
 var bg = new Image();
 bg.src = "Images/space_bg.jpg";
 
 function update() {
-    myX = myX+(mouseX-myX)/10;
-    myY = myY+(mouseY-myY)/10;
+  myX = myX + (mouseX - myX) / 10;
+  myY = myY + (mouseY - myY) / 10;
 
-    if(exitB.flag){
-      exitB.setAlpha(0.7);
-    }else{
-      exitB.setAlpha(0.4);
-    }
+  if (exitB.flag) {
+    exitB.setAlpha(0.7);
+  } else {
+    exitB.setAlpha(0.4);
+  }
 
-    if(saveB.flag){
-      saveB.setAlpha(0.7)
-    }else{
-      saveB.setAlpha(0.4)
-    }
+  if (saveB.flag) {
+    saveB.setAlpha(0.7)
+  } else {
+    saveB.setAlpha(0.4)
+  }
 
-    if(infoB.flag){
-      infoB.setAlpha(0.7)
-    }else{
-      infoB.setAlpha(0.4)
-    }
+  if (infoB.flag) {
+    infoB.setAlpha(0.7)
+  } else {
+    infoB.setAlpha(0.4)
+  }
 
-    if(createB.flag){
-      createB.setAlpha(0.7)
-    }else{
-      createB.setAlpha(0.4)
-    }
+  if (zoomB.flag) {
+    zoomB.setAlpha(0.7);
+  } else {
+    zoomB.setAlpha(0.4);
+  }
 
-    if(updateB.flag){
-      updateB.setAlpha(0.7)
-    }else{
-      updateB.setAlpha(0.4)
-    }
+  if (zoomOutB.flag) {
+    zoomOutB.setAlpha(0.7);
+  } else {
+    zoomOutB.setAlpha(0.4);
+  }
 
-    if(addB.flag){
-      addB.setAlpha(0.7)
-    }else{
-      addB.setAlpha(0.4)
-    }
+  if (createB.flag) {
+    createB.setAlpha(0.7)
+  } else {
+    createB.setAlpha(0.4)
+  }
 
-    if(configB.flag){
-      configB.setAlpha(0.7)
-    }else{
-      configB.setAlpha(0.4)
-    }
+  if (updateB.flag) {
+    updateB.setAlpha(0.7)
+  } else {
+    updateB.setAlpha(0.4)
+  }
 
-    if(renameB.flag){
-      renameB.setAlpha(0.7)
-    }else{
-      renameB.setAlpha(0.4)
-    }
+  if (addB.flag) {
+    addB.setAlpha(0.7)
+  } else {
+    addB.setAlpha(0.4)
+  }
 
-    if(backB.flag){
-      backB.setAlpha(0.7)
-    }else{
-      backB.setAlpha(0.4)
-    }
+  if (configB.flag) {
+    configB.setAlpha(0.7)
+  } else {
+    configB.setAlpha(0.4)
+  }
 
-    for (var i = 0; i < menuMainList.length; i++) {
-      if(menuMainList[i].on){
-        menuMainList[i].setAlpha(1);
-      }else{
-        menuMainList[i].setAlpha(0.7);
-      }
-    }
+  if (renameB.flag) {
+    renameB.setAlpha(0.7)
+  } else {
+    renameB.setAlpha(0.4)
+  }
 
-    for (var i = 0; i < planetCreateList.length; i++) {
-      if(planetCreateList[i].on){
-        planetCreateList[i].setAlpha(1);
-      }else{
-        planetCreateList[i].setAlpha(0.7);
-      }
-    }
+  if (backB.flag) {
+    backB.setAlpha(0.7)
+  } else {
+    backB.setAlpha(0.4)
+  }
 
-    for (var i = 0; i < sunCreateList.length; i++) {
-      if(sunCreateList[i].on){
-        sunCreateList[i].setAlpha(1);
-      }else{
-        sunCreateList[i].setAlpha(0.7);
-      }
+  for (var i = 0; i < menuMainList.length; i++) {
+    if (menuMainList[i].on) {
+      menuMainList[i].setAlpha(1);
+    } else {
+      menuMainList[i].setAlpha(0.7);
     }
+  }
 
-    if(setLinesButton.on){
-      setLinesButton.setAlpha(1);
-    }else{
-      setLinesButton.setAlpha(0.7);
+  for (var i = 0; i < planetCreateList.length; i++) {
+    if (planetCreateList[i].on) {
+      planetCreateList[i].setAlpha(1);
+    } else {
+      planetCreateList[i].setAlpha(0.7);
     }
+  }
+
+  for (var i = 0; i < sunCreateList.length; i++) {
+    if (sunCreateList[i].on) {
+      sunCreateList[i].setAlpha(1);
+    } else {
+      sunCreateList[i].setAlpha(0.7);
+    }
+  }
+
+  if (setLinesButton.on) {
+    setLinesButton.setAlpha(1);
+  } else {
+    setLinesButton.setAlpha(0.7);
+  }
 }
 
 function draw() {
-    // This is how you draw a rectangle
-    context.drawImage(bg, 0, 0, WIDTH, HEIGHT);
+  // This is how you draw a rectangle
+  context.drawImage(bg, 0, 0, WIDTH, HEIGHT);
 
 
-    context.beginPath();
-    context.arc(myX, myY, 15, 0, Math.PI*2);
-    context.closePath();
-    context.fill();
+  context.beginPath();
+  context.arc(myX, myY, 15, 0, Math.PI * 2);
+  context.closePath();
+  context.fill();
 
-    addB.draw();
-    configB.draw();
-    exitB.draw();
-    saveB.draw();
-    infoB.drawInfo();
+  addB.draw();
+  configB.draw();
+  exitB.draw();
+  saveB.draw();
+  infoB.drawInfo();
+  zoomB.draw();
+  zoomOutB.draw();
 
-    if(addB.clicked){
-      context.globalAlpha = 0.8;
-      context.fillStyle = "black";
-      context.fillRect(addB.x, addB.y + addB.sizeY, addB.sizeX, HEIGHT - 2 * exitB.sizeY);
+  if (addB.clicked) {
+    context.globalAlpha = 0.8;
+    context.fillStyle = "black";
+    context.fillRect(addB.x, addB.y + addB.sizeY, addB.sizeX, HEIGHT - 2 * exitB.sizeY);
 
-      if(!openSunMenu && !openPlanetMenu){
+    if (!openSunMenu && !openPlanetMenu) {
 
-        for (var i = 0; i < menuMainList.length; i++) {
-          menuMainList[i].draw();
-        }
-
-      }else if(openSunMenu){
-
-        backB.draw();
-
-        for (var i = 0; i < sunCreateList.length; i++) {
-          sunCreateList[i].draw();
-        }
-
-      }else if (openPlanetMenu) {
-
-        backB.draw();
-
-        for (var i = 0; i < planetCreateList.length; i++) {
-          planetCreateList[i].draw();
-        }
-
+      for (var i = 0; i < menuMainList.length; i++) {
+        menuMainList[i].draw();
       }
 
-      context.globalAlpha = 1;
+    } else if (openSunMenu) {
+
+      backB.draw();
+
+      for (var i = 0; i < sunCreateList.length; i++) {
+        sunCreateList[i].draw();
+      }
+
+    } else if (openPlanetMenu) {
+
+      backB.draw();
+
+      for (var i = 0; i < planetCreateList.length; i++) {
+        planetCreateList[i].draw();
+      }
+
     }
 
-    if(configMenu){
+    context.globalAlpha = 1;
+  }
 
-      context.globalAlpha = 0.8;
-      context.fillStyle = "black";
-      context.fillRect(configB.x, configB.y + configB.sizeY, configB.sizeX, HEIGHT - configB.sizeY);
-      context.globalAlpha = 1;
+  if (configMenu) {
+
+    context.globalAlpha = 0.8;
+    context.fillStyle = "black";
+    context.fillRect(configB.x, configB.y + configB.sizeY, configB.sizeX, HEIGHT - configB.sizeY);
+    context.globalAlpha = 1;
 
 
-      if(configObject != undefined){
+    if (configObject != undefined) {
 
-        if(newOrUpdate == "new"){
-          createB.draw();
-        }else if(newOrUpdate == "update"){
-          updateB.draw();
-        }
+      if (newOrUpdate == "new") {
+        createB.draw();
+      } else if (newOrUpdate == "update") {
+        updateB.draw();
+      }
 
-        renameB.draw();
-        if(sunOrPlanet == "sun"){
+      renameB.draw();
+      if (sunOrPlanet == "sun") {
 
-          context.textAlign="center";
-          context.textBaseline = "middle";
-          context.fillStyle = "white";
-          context.font = "30px Arial";
-          context.fillText(configObject.lines, (setLinesButton.x/2), setLinesButton.y + setLinesButton.sizeY/2);
-          setLinesButton.draw();
-
-        }else if(sunOrPlanet == "planet"){
-          context.textAlign="center";
-          context.textBaseline = "middle";
-          context.fillStyle = "white";
-          context.font = "30px Arial";
-          context.fillText(configObject.orbit, (setLinesButton.x/2), setLinesButton.y + setLinesButton.sizeY/2);
-          selectOrbit.draw();
-        }
-
-        configObject.draw();
-
-        context.textAlign="center";
+        context.textAlign = "center";
         context.textBaseline = "middle";
         context.fillStyle = "white";
-        context.font = "50px Arial";
-        context.fillText(configObject.name, configObject.x + configObject.size/2, configObject.y + 50);
+        context.font = "30px Arial";
+        context.fillText(configObject.lines, (setLinesButton.x / 2), setLinesButton.y + setLinesButton.sizeY / 2);
+        setLinesButton.draw();
+
+      } else if (sunOrPlanet == "planet") {
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        context.fillStyle = "white";
+        context.font = "30px Arial";
+        context.fillText(configObject.orbit, (setLinesButton.x / 2), setLinesButton.y + setLinesButton.sizeY / 2);
+        selectOrbit.draw();
       }
 
-    }else{
+      configObject.draw();
 
-      context.textAlign="center";
+      context.textAlign = "center";
       context.textBaseline = "middle";
       context.fillStyle = "white";
-      context.font = "30px Arial";
-      context.fillText(game.system, WIDTH/2, addB.sizeY/2);
-
-      for (var i = 0; i < sun.length; i++) {
-        drawObj(sun[i], "sun");
-      }
-
+      context.font = "50px Arial";
+      context.fillText(configObject.name, configObject.x + configObject.size / 2, configObject.y + 50);
     }
+
+  } else {
+
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillStyle = "white";
+    context.font = "30px Arial";
+    context.fillText(game.system, WIDTH / 2, addB.sizeY / 2);
+
+    for (var i = 0; i < sun.length; i++) {
+      drawObj(sun[i], "sun");
+    }
+
+  }
+
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillStyle = "white";
+  context.font = "40px Arial";
+  context.fillText(zoomIndex, zoomB.x + 62.5, zoomB.y + 30);
 
 };
 
 function keyup(key) {
-    // Show the pressed keycode in the console
-    console.log("Pressed", key);
+  // Show the pressed keycode in the console
+  console.log("Pressed", key);
 };
 
 function mouseup() {
-  if(exitB.isItOnTheButton(mouseX, mouseY, 1, 1)){
+  if (exitB.isItOnTheButton(mouseX, mouseY, 1, 1)) {
     // isAllSaved(game);
     //exit();
     backToMain();
   }
 
-  if(saveB.isItOnTheButton(mouseX, mouseY, 1, 1)){
+  if (saveB.isItOnTheButton(mouseX, mouseY, 1, 1)) {
     saveGame(game);
   }
 
-  if(isPointInCircle(infoB.x, infoB.y, mouseX, mouseY, infoB.sizeX)){
+  if (isPointInCircle(infoB.x, infoB.y, mouseX, mouseY, infoB.sizeX)) {
     //config.object
     if (configObject != undefined) {
       if (sunOrPlanet == 'sun') {
-        fs.readFile('info/Suns/' + configObject.type + '.txt', 'utf8', function(err, content) {
+        fs.readFile('info/Suns/' + configObject.type + '.txt', 'utf8', function (err, content) {
           if (content != undefined) {
             Swal.fire({
               type: 'info',
@@ -296,7 +324,7 @@ function mouseup() {
           }
         });
       } else if (sunOrPlanet == "planet") {
-        fs.readFile('info/Planets/' + configObject.type + '.txt', 'utf8', function(err, content) {
+        fs.readFile('info/Planets/' + configObject.type + '.txt', 'utf8', function (err, content) {
           if (content != undefined) {
             Swal.fire({
               type: 'info',
@@ -309,12 +337,32 @@ function mouseup() {
     }
   }
 
-  if(createB.isItOnTheButton(mouseX, mouseY, 1, 1) && newOrUpdate == "new" && configMenu){
-    if(sunOrPlanet == "sun"){
-      if(!isThereSun){
+  if (zoomB.isItOnTheButton(mouseX, mouseY, 1, 1) && !configMenu && zoomIndex < 3) {
+    sun[0].size *= 2;
+
+    sun[0].x -= sun[0].size / 4;
+    sun[0].y -= sun[0].size / 4;
+
+    zoomIndex++;
+  }
+
+  if (zoomOutB.isItOnTheButton(mouseX, mouseY, 1, 1) && !configMenu && zoomIndex > -6) {
+    sun[0].x += sun[0].size / 4;
+    sun[0].y += sun[0].size / 4;
+
+    sun[0].size /= 2;
+
+    zoomIndex--;
+  }
+
+  if (createB.isItOnTheButton(mouseX, mouseY, 1, 1) && newOrUpdate == "new" && configMenu) {
+    if (sunOrPlanet == "sun") {
+      if (!isThereSun) {
+        var realSun = new RealSun(WIDTH / 2, HEIGHT / 2, configObject.type, configObject.name, configObject.lines);
         var sunO = {
-          x: WIDTH/2,
-          y: HEIGHT/2,
+          x: WIDTH / 2,
+          y: HEIGHT / 2,
+          size: realSun.size,
           type: configObject.type,
           name: configObject.name,
           lines: configObject.lines
@@ -323,7 +371,7 @@ function mouseup() {
         //sun.push(sunO);
         isThereSun = true;
       }
-    }else if(sunOrPlanet == "planet"){
+    } else if (sunOrPlanet == "planet") {
       var planet = {
         orbit: configObject.orbit,
         name: configObject.name,
@@ -332,7 +380,7 @@ function mouseup() {
       };
       var flag = 0;
       for (var i = 0; i < planets.length; i++) {
-        if(planets[i].orbit == configObject.orbit){
+        if (planets[i].orbit == configObject.orbit) {
           flag++;
         }
       }
@@ -341,15 +389,15 @@ function mouseup() {
         flag++;
       }
 
-      if(flag == 0){
-      game.planets.push(planet);
-    }else{
-      Swal.fire({
-        type: 'error',
-        title: 'Oops...',
-        text: 'You cannot put a planet in that orbit.'
-      });
-    }
+      if (flag == 0) {
+        game.planets.push(planet);
+      } else {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'You cannot put a planet in that orbit.'
+        });
+      }
     }
 
     addB.clicked = false;
@@ -368,12 +416,14 @@ function mouseup() {
 
   }
 
-  if(updateB.isItOnTheButton(mouseX, mouseY, 1, 1) && newOrUpdate == "update" && configMenu){
-    if(sunOrPlanet == "sun"){
-      if(isThereSun){
+  if (updateB.isItOnTheButton(mouseX, mouseY, 1, 1) && newOrUpdate == "update" && configMenu) {
+    if (sunOrPlanet == "sun") {
+      if (isThereSun) {
+        var realSun = new RealSun(WIDTH / 2, HEIGHT / 2, configObject.type, configObject.name, configObject.lines);
         var sunO = {
-          x: WIDTH/2,
-          y: HEIGHT/2,
+          x: WIDTH / 2,
+          y: HEIGHT / 2,
+          size: realSun.size,
           type: sun[0].type,
           name: configObject.name,
           lines: configObject.lines
@@ -383,7 +433,7 @@ function mouseup() {
         //sunO = game.sun;
         isThereSun = true;
       }
-    }else if(sunOrPlanet == "planet"){
+    } else if (sunOrPlanet == "planet") {
       var planet = {
         orbit: configObject.orbit,
         name: configObject.name,
@@ -410,23 +460,23 @@ function mouseup() {
 
   }
 
-  if(backB.isItOnTheButton(mouseX, mouseY, 1, 1) && (openSunMenu || openPlanetMenu)){
-    if(openSunMenu){
+  if (backB.isItOnTheButton(mouseX, mouseY, 1, 1) && (openSunMenu || openPlanetMenu)) {
+    if (openSunMenu) {
       openSunMenu = false;
     }
-    if(openPlanetMenu){
+    if (openPlanetMenu) {
       openPlanetMenu = false;
     }
     mouseX = -10;
     mouseY = -10;
   }
 
-  if(addB.isItOnTheButton(mouseX, mouseY, 1, 1) && !addB.clicked){
+  if (addB.isItOnTheButton(mouseX, mouseY, 1, 1) && !addB.clicked) {
     addB.clicked = true;
     addB.text = "Cancel";
     addB.type = Button.DANGER;
     openCreateMenu = true;
-  }else if(addB.isItOnTheButton(mouseX, mouseY, 1, 1) && addB.clicked){
+  } else if (addB.isItOnTheButton(mouseX, mouseY, 1, 1) && addB.clicked) {
     addB.clicked = false;
     addB.text = "Add +";
     addB.type = Button.NORMAL;
@@ -435,17 +485,17 @@ function mouseup() {
     openPlanetMenu = false;
   }
 
-  if(configB.isItOnTheButton(mouseX, mouseY, 1, 1) && !configB.clicked){
+  if (configB.isItOnTheButton(mouseX, mouseY, 1, 1) && !configB.clicked) {
     configB.clicked = true;
     configMenu = true;
     configB.text = "Config ^";
-  }else if(configB.isItOnTheButton(mouseX, mouseY, 1, 1) && configB.clicked){
+  } else if (configB.isItOnTheButton(mouseX, mouseY, 1, 1) && configB.clicked) {
     configB.clicked = false;
     configMenu = false;
     configB.text = "Config V";
   }
 
-  if(renameB.isItOnTheButton(mouseX, mouseY, 1, 1) && configMenu && configObject!= undefined){
+  if (renameB.isItOnTheButton(mouseX, mouseY, 1, 1) && configMenu && configObject != undefined) {
     //rename function
     var newName = renameItem(configObject.name).then((text) => {
       configObject.setName(text);
@@ -454,13 +504,13 @@ function mouseup() {
 
   }
 
-  if(menuMainList[0].isItOnTheItem(mouseX, mouseY, 1, 1) && !openSunMenu && !openPlanetMenu && openCreateMenu && !isThereSun){
+  if (menuMainList[0].isItOnTheItem(mouseX, mouseY, 1, 1) && !openSunMenu && !openPlanetMenu && openCreateMenu && !isThereSun) {
 
     openSunMenu = true;
     mouseX = -10;
     mouseY = -10;
 
-  }else if(menuMainList[0].isItOnTheItem(mouseX, mouseY, 1, 1) && !openSunMenu && !openPlanetMenu && openCreateMenu && isThereSun){
+  } else if (menuMainList[0].isItOnTheItem(mouseX, mouseY, 1, 1) && !openSunMenu && !openPlanetMenu && openCreateMenu && isThereSun) {
     Swal.fire({
       type: 'error',
       title: 'Oops...',
@@ -468,13 +518,13 @@ function mouseup() {
     })
   }
 
-  if(menuMainList[1].isItOnTheItem(mouseX, mouseY, 1, 1) && !openSunMenu && !openPlanetMenu && openCreateMenu && isThereSun){
+  if (menuMainList[1].isItOnTheItem(mouseX, mouseY, 1, 1) && !openSunMenu && !openPlanetMenu && openCreateMenu && isThereSun) {
 
     openPlanetMenu = true;
     mouseX = -10;
     mouseY = -10;
 
-  }else if(menuMainList[1].isItOnTheItem(mouseX, mouseY, 1, 1) && !openSunMenu && !openPlanetMenu && openCreateMenu && !isThereSun){
+  } else if (menuMainList[1].isItOnTheItem(mouseX, mouseY, 1, 1) && !openSunMenu && !openPlanetMenu && openCreateMenu && !isThereSun) {
     Swal.fire({
       type: 'error',
       title: 'Oops...',
@@ -484,7 +534,7 @@ function mouseup() {
   }
 
   for (var i = 0; i < planetCreateList.length; i++) {
-    if(planetCreateList[i].isItOnTheItem(mouseX, mouseY, 1, 1) && openPlanetMenu){
+    if (planetCreateList[i].isItOnTheItem(mouseX, mouseY, 1, 1) && openPlanetMenu) {
 
       configB.clicked = true;
       configMenu = true;
@@ -492,7 +542,7 @@ function mouseup() {
       sunOrPlanet = "planet";
       newOrUpdate = "new";
       configMenu = true;
-      configObject = new Planet(configB.sizeX+(addB.x - configB.sizeX)/2 - HEIGHT/2, 0, HEIGHT, i, randomString(5));
+      configObject = new Planet(configB.sizeX + (addB.x - configB.sizeX) / 2 - HEIGHT / 2, 0, HEIGHT, i, randomString(5));
       mouseX = -10;
       mouseY = -10;
 
@@ -500,7 +550,7 @@ function mouseup() {
   }
 
   for (var i = 0; i < sunCreateList.length; i++) {
-    if(sunCreateList[i].isItOnTheItem(mouseX, mouseY, 1, 1) && openSunMenu){
+    if (sunCreateList[i].isItOnTheItem(mouseX, mouseY, 1, 1) && openSunMenu) {
 
       configB.clicked = true;
       configMenu = true;
@@ -508,14 +558,14 @@ function mouseup() {
       sunOrPlanet = "sun";
       newOrUpdate = "new";
       configMenu = true;
-      configObject = new Sun(configB.sizeX+(addB.x - configB.sizeX)/2 - HEIGHT/2, 0, HEIGHT, i, randomString(5));
+      configObject = new Sun(configB.sizeX + (addB.x - configB.sizeX) / 2 - HEIGHT / 2, 0, HEIGHT, i, randomString(5));
       mouseX = -10;
       mouseY = -10;
 
     }
   }
 
-  if(setLinesButton.isItOnTheItem(mouseX, mouseY, 1, 1) && configObject != undefined && configMenu && sunOrPlanet == "sun"){
+  if (setLinesButton.isItOnTheItem(mouseX, mouseY, 1, 1) && configObject != undefined && configMenu && sunOrPlanet == "sun") {
 
     var newLines = setOrbits(configObject.lines).then((lines) => {
       configObject.lines = lines;
@@ -525,7 +575,7 @@ function mouseup() {
 
   }
 
-  if(selectOrbit.isItOnTheItem(mouseX, mouseY, 1, 1) && configObject != undefined && configMenu && sunOrPlanet == "planet"){
+  if (selectOrbit.isItOnTheItem(mouseX, mouseY, 1, 1) && configObject != undefined && configMenu && sunOrPlanet == "planet") {
 
     var newOrbit = setOrbit(configObject.orbit, sun[0].lines, planets).then((orbit) => {
       configObject.orbit = orbit;
@@ -538,7 +588,8 @@ function mouseup() {
 
   for (var i = 0; i < sun.length; i++) {
     var nSun = new RealSun(sun[i].x, sun[i].y, sun[i].type, sun[i].name, sun[i].lines);
-    if(areColliding(nSun.x, nSun.y, nSun.size, nSun.size, mouseX, mouseY, 1, 1) && !configMenu){
+    nSun.size = sun[i].size;
+    if (areColliding(nSun.x, nSun.y, nSun.size, nSun.size, mouseX, mouseY, 1, 1) && !configMenu) {
       mouseX = -10;
       mouseY = -10;
       configMenu = true;
@@ -547,139 +598,156 @@ function mouseup() {
       configB.text = "Config ^";
       sunOrPlanet = "sun";
       newOrUpdate = "update";
-      configObject = new Sun(configB.sizeX+(addB.x - configB.sizeX)/2 - HEIGHT/2, 0, HEIGHT, nSun.type, nSun.name);
+      configObject = new Sun(configB.sizeX + (addB.x - configB.sizeX) / 2 - HEIGHT / 2, 0, HEIGHT, nSun.type, nSun.name);
       configObject.lines = nSun.lines;
     }
   }
-    // Show coordinates of mouse on click
-    //console.log("Mouse clicked at", mouseX, mouseY);
+  // Show coordinates of mouse on click
+  //console.log("Mouse clicked at", mouseX, mouseY);
 };
 
 function mousemove() {
-  if(exitB.isItOnTheButton(mouseX, mouseY, 1, 1)){
+  if (exitB.isItOnTheButton(mouseX, mouseY, 1, 1)) {
 
     exitB.flag = true;
     exitB.setBorder(true);
 
-  }else{
+  } else {
     exitB.flag = false;
     exitB.setBorder(false);
   }
 
-  if(saveB.isItOnTheButton(mouseX, mouseY, 1, 1)){
+  if (saveB.isItOnTheButton(mouseX, mouseY, 1, 1)) {
 
     saveB.flag = true;
     saveB.setBorder(true);
-  }else{
+  } else {
     saveB.setBorder(false);
     saveB.flag = false;
   }
 
-  if(createB.isItOnTheButton(mouseX, mouseY, 1, 1)){
+  if (createB.isItOnTheButton(mouseX, mouseY, 1, 1)) {
 
     createB.flag = true;
     createB.setBorder(true);
-  }else{
+  } else {
     createB.setBorder(false);
     createB.flag = false;
   }
 
-  if(isPointInCircle(infoB.x, infoB.y, mouseX, mouseY, infoB.sizeX)){
+  if (isPointInCircle(infoB.x, infoB.y, mouseX, mouseY, infoB.sizeX)) {
 
     infoB.flag = true;
     infoB.setBorder(true);
-  }else{
+  } else {
     infoB.setBorder(false);
     infoB.flag = false;
   }
 
-  if(updateB.isItOnTheButton(mouseX, mouseY, 1, 1)){
+  if (zoomB.isItOnTheButton(mouseX, mouseY, 1, 1)) {
+    zoomB.flag = true;
+    zoomB.setBorder(true);
+  } else {
+    zoomB.setBorder(false);
+    zoomB.flag = false;
+  }
+
+  if (zoomOutB.isItOnTheButton(mouseX, mouseY, 1, 1)) {
+    zoomOutB.flag = true;
+    zoomOutB.setBorder(true);
+  } else {
+    zoomOutB.setBorder(false);
+    zoomOutB.flag = false;
+  }
+
+
+  if (updateB.isItOnTheButton(mouseX, mouseY, 1, 1)) {
 
     updateB.flag = true;
     updateB.setBorder(true);
-  }else{
+  } else {
     updateB.setBorder(false);
     updateB.flag = false;
   }
 
-  if(addB.isItOnTheButton(mouseX, mouseY, 1, 1)){
+  if (addB.isItOnTheButton(mouseX, mouseY, 1, 1)) {
 
     addB.flag = true;
     addB.setBorder(true);
-  }else{
+  } else {
     addB.setBorder(false);
     addB.flag = false;
   }
 
-  if(configB.isItOnTheButton(mouseX, mouseY, 1, 1)){
+  if (configB.isItOnTheButton(mouseX, mouseY, 1, 1)) {
 
     configB.flag = true;
     configB.setBorder(true);
-  }else{
+  } else {
     configB.setBorder(false);
     configB.flag = false;
   }
 
-  if(renameB.isItOnTheButton(mouseX, mouseY, 1, 1)){
+  if (renameB.isItOnTheButton(mouseX, mouseY, 1, 1)) {
 
     renameB.flag = true;
     renameB.setBorder(true);
-  }else{
+  } else {
     renameB.setBorder(false);
     renameB.flag = false;
   }
 
-  if(backB.isItOnTheButton(mouseX, mouseY, 1, 1)){
+  if (backB.isItOnTheButton(mouseX, mouseY, 1, 1)) {
 
     backB.flag = true;
     backB.setBorder(true);
-  }else{
+  } else {
     backB.setBorder(false);
     backB.flag = false;
   }
 
   for (var i = 0; i < menuMainList.length; i++) {
-    if(menuMainList[i].isItOnTheItem(mouseX, mouseY, 1, 1)){
+    if (menuMainList[i].isItOnTheItem(mouseX, mouseY, 1, 1)) {
 
       menuMainList[i].on = true;
       menuMainList[i].setBorder(true);
-    }else{
+    } else {
       menuMainList[i].setBorder(false);
       menuMainList[i].on = false;
     }
   }
 
   for (var i = 0; i < planetCreateList.length; i++) {
-    if(planetCreateList[i].isItOnTheItem(mouseX, mouseY, 1, 1)){
+    if (planetCreateList[i].isItOnTheItem(mouseX, mouseY, 1, 1)) {
 
       planetCreateList[i].on = true;
       planetCreateList[i].setBorder(true);
-    }else{
+    } else {
       planetCreateList[i].setBorder(false);
       planetCreateList[i].on = false;
     }
   }
 
   for (var i = 0; i < sunCreateList.length; i++) {
-    if(sunCreateList[i].isItOnTheItem(mouseX, mouseY, 1, 1)){
+    if (sunCreateList[i].isItOnTheItem(mouseX, mouseY, 1, 1)) {
 
       sunCreateList[i].on = true;
       sunCreateList[i].setBorder(true);
-    }else{
+    } else {
       sunCreateList[i].setBorder(false);
       sunCreateList[i].on = false;
     }
   }
 
-  if(setLinesButton.isItOnTheItem(mouseX, mouseY, 1, 1)){
+  if (setLinesButton.isItOnTheItem(mouseX, mouseY, 1, 1)) {
 
     setLinesButton.on = true;
     setLinesButton.setBorder(true);
-  }else{
+  } else {
     setLinesButton.setBorder(false);
     setLinesButton.on = false;
   }
 
-    // Show coordinates of mouse on click
-    //console.log("Mouse clicked at", mouseX, mouseY);
+  // Show coordinates of mouse on click
+  //console.log("Mouse clicked at", mouseX, mouseY);
 };

@@ -5,10 +5,11 @@
     {
       "x": 640,
       "y": 360,
+      "size": 50,
       "type": 1,
-      "name": "Qka pitchka",
+      "name": "QK PITCH",
       "lines": 8
     }
   ],
-  "saved": "2019-10-19T16:06:53.193Z"
+  "saved": "2019-10-20T08:01:26.519Z"
 }
