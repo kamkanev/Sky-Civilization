@@ -5,10 +5,16 @@
     {
       "x": 640,
       "y": 360,
+      "size": 50,
       "type": 1,
+<<<<<<< HEAD
+      "name": "QK PITCH",
+      "lines": 8
+=======
       "name": "Qk0 slunce",
       "lines": 5
+>>>>>>> adc1bb976301dbb13bd063e545f17cc6ef15a63e
     }
   ],
-  "saved": "2019-10-19T16:06:53.193Z"
+  "saved": "2019-10-20T08:01:26.519Z"
 }

@@ -194,6 +194,8 @@ function drawObj(obj, sunOrPlanet) {
 
     var nSun = new RealSun(obj.x, obj.y, obj.type, obj.name, obj.lines);
 
+    nSun.size = obj.size;
+
     nSun.draw();
 
   }
