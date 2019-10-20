@@ -17,6 +17,7 @@ class Planet extends CosmicObject {
     super.configMenu = false;
     this.type = type;
     this.orbit = 3;
+    this.number = 0;
   }
 
   async setName(name){

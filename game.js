@@ -8,6 +8,10 @@ console.log(game);
 var sun = game.sun;
 var planets = game.planets;
 
+for (var i = 0; i < planets.length; i++) {
+  planets[i].angle = 0.1;
+}
+
 var zoomIndex = 0;
 
 var isThereSun = isThereASun(game);
@@ -80,6 +84,15 @@ bg.src = "Images/space_bg.jpg";
 function update() {
   myX = myX + (mouseX - myX) / 10;
   myY = myY + (mouseY - myY) / 10;
+
+  for (var i = 0; i < planets.length; i++) {
+    var pl = new RealPlanet(planets[i].type, planets[i].name, planets[i].orbit);
+
+    planets[i].x = (sun[0].x + sun[0].size / 4) - ((sun[0].size+100) * (planets[i].orbit * 0.8) * Math.cos(planets[i].angle));
+     planets[i].y = (sun[0].y + sun[0].size / 4) + ((sun[0].size+50) * (planets[i].orbit * 0.8) * Math.sin(planets[i].angle));
+    planets[i].angle += 0.006 * (sun[0].lines / planets[i].orbit);
+    //console.log(planets[i].x);
+  }
 
   if (exitB.flag) {
     exitB.setAlpha(0.7);
@@ -176,6 +189,8 @@ function update() {
   } else {
     setLinesButton.setAlpha(0.7);
   }
+
+
 }
 
 function draw() {
@@ -183,10 +198,10 @@ function draw() {
   context.drawImage(bg, 0, 0, WIDTH, HEIGHT);
 
 
-  context.beginPath();
-  context.arc(myX, myY, 15, 0, Math.PI * 2);
-  context.closePath();
-  context.fill();
+  // context.beginPath();
+  // context.arc(myX, myY, 15, 0, Math.PI * 2);
+  // context.closePath();
+  // context.fill();
 
   addB.draw();
   configB.draw();
@@ -265,6 +280,7 @@ function draw() {
 
       configObject.draw();
 
+
       context.textAlign = "center";
       context.textBaseline = "middle";
       context.fillStyle = "white";
@@ -282,7 +298,16 @@ function draw() {
 
     for (var i = 0; i < sun.length; i++) {
       drawObj(sun[i], "sun");
+      for (var j = 1; j <= sun[i].lines; j++) {
+        elipse(sun[i].size + 100, sun[i].size + 50, j, sun[i].x + sun[i].size/4, sun[i].y + sun[i].size/4);
+      }
     }
+
+    for (var i = 0; i < planets.length; i++) {
+      drawObj(planets[i], "planet");
+    }
+
+
 
   }
 
@@ -376,7 +401,11 @@ function mouseup() {
         orbit: configObject.orbit,
         name: configObject.name,
         type: configObject.type,
-        size: 100
+        size: 100,
+        angle: 0.1,
+        x: 0,
+        y: 0,
+        number: planets.length
       };
       var flag = 0;
       for (var i = 0; i < planets.length; i++) {
@@ -385,7 +414,7 @@ function mouseup() {
         }
       }
 
-      if (sun[0].lines > configObject.orbit) {
+      if (sun[0].lines < configObject.orbit) {
         flag++;
       }
 
@@ -437,10 +466,17 @@ function mouseup() {
       var planet = {
         orbit: configObject.orbit,
         name: configObject.name,
-        type: configObject.type
+        type: configObject.type,
+        size: 100,
+        angle: 0.1,
+        x: 0,
+        y: 0,
+        number: configObject.number
       };
 
+      //alert(configObject.number)
 
+      game.planets[configObject.number] = planet;
       //game.planets
     }
 
@@ -600,6 +636,25 @@ function mouseup() {
       newOrUpdate = "update";
       configObject = new Sun(configB.sizeX + (addB.x - configB.sizeX) / 2 - HEIGHT / 2, 0, HEIGHT, nSun.type, nSun.name);
       configObject.lines = nSun.lines;
+    }
+  }
+
+  for (var i = 0; i < planets.length; i++) {
+    var nPLanet = new RealPlanet(planets[i].type, planets[i].name, planets[i].orbit);
+    nPLanet.x = planets[i].x;
+    nPLanet.y = planets[i].y;
+    if (areColliding(nPLanet.x, nPLanet.y, nPLanet.size, nPLanet.size, mouseX, mouseY, 1, 1) && !configMenu) {
+      mouseX = -10;
+      mouseY = -10;
+      configMenu = true;
+      configB.clicked = true;
+      configMenu = true;
+      configB.text = "Config ^";
+      sunOrPlanet = "planet";
+      newOrUpdate = "update";
+      configObject = new Planet(configB.sizeX + (addB.x - configB.sizeX) / 2 - HEIGHT / 2, 0, HEIGHT, nPLanet.type, nPLanet.name);
+      configObject.lines = nSun.lines;
+      configObject.number = i;
     }
   }
   // Show coordinates of mouse on click

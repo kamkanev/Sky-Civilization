@@ -8,6 +8,7 @@ const Sun = require('./class/Sun.js');
 const Button = require('./class/JsButton.js');
 const SideItem = require('./class/SideItem.js');
 const RealSun = require('./class/RealSun.js');
+const RealPlanet = require('./class/RealPlanet.js');
 
 let iconA = remote.nativeImage.createFromPath(pathI.join(__dirname, "Images/icon.ico"))
 
@@ -198,6 +199,46 @@ function drawObj(obj, sunOrPlanet) {
 
     nSun.draw();
 
+  }else if(sunOrPlanet == "planet"){
+
+
+    var nPlanet = new RealPlanet(obj.type, obj.name, obj.orbit);
+    nPlanet.x = obj.x - 10;
+    nPlanet.y = obj.y - 10;
+
+    nPlanet.draw();
+
+
+
   }
 
+}
+
+function elipse(a, b, line, xCentre, yCentre) {
+
+  context.strokeStyle='black';
+
+  context.beginPath();
+
+  for (var i = 0 * Math.PI; i < 2 * Math.PI; i += 0.01 ) {
+      xPos = xCentre - (a * (line * 0.8) * Math.cos(i));
+      yPos = yCentre + (b * (line * 0.8) * Math.sin(i));
+
+      if (i == 0) {
+          context.moveTo(xPos, yPos);
+      } else {
+          context.lineTo(xPos, yPos);
+      }
+  }
+  context.lineWidth = 3;
+  context.strokeStyle = "#787878";
+  context.stroke();
+  context.closePath();
+
+}
+
+function movePlanet(a, b, angle, x, y, planet, sun) {
+  planet.x = x - (a * (planet.orbit * 0.8) * Math.cos(angle));
+   planet.y = y + (b * (planet.orbit * 0.8) * Math.sin(angle));
+   //angle += 0.01 * (sun.lines / planet.orbits);
 }
